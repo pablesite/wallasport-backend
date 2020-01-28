@@ -1,0 +1,28 @@
+
+.login_container {
+  display: grid;
+  grid-template-columns: 35vw  auto  35vw;
+  grid-template-rows: 5vh  auto  5vh;
+
+  
+}
+
+.login_item {
+  grid-column-start: 2;
+  grid-column-end: 3;
+
+  grid-row-start: 2;
+  grid-row-end: 3;
+
+  padding: 10px;
+  background-color: rgba(53, 30, 23, .9);;
+
+  border-radius: 10px 10px 10px 10px;
+  -moz-border-radius: 10px 10px 10px 10px;
+  -webkit-border-radius: 10px 10px 10px 10px;
+  border: 5px solid #351E15;
+
+  color: antiquewhite;
+
+}
+

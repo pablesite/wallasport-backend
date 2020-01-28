@@ -1,0 +1,45 @@
+{
+  "name": "nodepop",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "dev": "cross-env DEBUG=nodeapi:* nodemon",
+    "prod": "cross-env NODE_ENV=production npm start",
+    "cluster": "cross-env NODE_ENV=production node ./bin/cluster",
+    "db": "node lib/install_db.js",
+    "testapp": "node_modules/.bin/eslint ./app.js",
+    "testroutes": "node_modules/.bin/eslint ./routes/**",
+    "testmodels": "node_modules/.bin/eslint ./models/**",
+    "testlib": "node_modules/.bin/eslint ./lib/**",
+    "testpublic": "node_modules/.bin/eslint ./public/**"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "cross-env": "^5.2.0",
+    "debug": "~2.6.9",
+    "ejs": "~2.6.1",
+    "express": "~4.16.1",
+    "express-validator": "^6.1.1",
+    "http-errors": "~1.6.3",
+    "mongoose": "^5.6.5",
+    "morgan": "~1.9.1",
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {
+    "amqplib": "^0.5.5",
+    "bcrypt": "^3.0.6",
+    "connect-mongo": "^3.1.2",
+    "cote": "^0.21.1",
+    "dotenv": "^8.2.0",
+    "eslint": "^6.1.0",
+    "express-session": "^1.17.0",
+    "i18n": "^0.8.4",
+    "jimp": "^0.8.5",
+    "jsonwebtoken": "^8.5.1",
+    "live-server": "^1.2.1",
+    "multer": "^1.4.2",
+    "nodemailer": "^6.3.1",
+    "nodemon": "^1.19.4"
+  }
+}

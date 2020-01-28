@@ -1,0 +1,46 @@
+{
+    "anuncios": [
+        {
+            "nombre": "Bicicleta",
+            "venta": true,
+            "precio": 830.15,
+            "foto": "bici.jpg",
+            "tag": [ "lifestyle", "motor"]
+         },
+        {
+            "nombre": "Tablet",
+            "venta": true,
+            "precio": 82.65,
+            "foto": "tablet.jpg",
+            "tag": [ "mobile", "work"]
+         },
+        {
+            "nombre": "iPhone 6S",
+            "venta": false,
+            "precio": 150.00,
+            "foto": "iphone.jpg",
+            "tag": [ "lifestyle", "mobile"]
+        },
+        {
+            "nombre": "Zapatillas Running",
+            "venta": false,
+            "precio": 200.00,
+            "foto": "zapatillas.jpg",
+            "tag": [ "lifestyle", "motor", "work"]
+         },
+         {
+            "nombre": "PlayStation 3",
+            "venta": true,
+            "precio": 100.00,
+            "foto": "play3.jpg",
+            "tag": [ "lifestyle"]
+        },
+        {
+            "nombre": "Altavoces PC",
+            "venta": false,
+            "precio": 35.00,
+            "foto": "altavoces.jpg",
+            "tag": [ "lifestyle", "work"]
+        }
+    ]
+}
