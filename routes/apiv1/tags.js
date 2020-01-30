@@ -18,8 +18,8 @@ router.get('/', function(req, res, next){
         /* Obtengo las tags de cada anuncio y las pongo en el array tags */
         let tags = [];
         list.forEach(function(element, index){
-            list[index].tag.forEach(function(el, ind){
-                tags.push(list[index].tag[ind]);
+            list[index].tags.forEach(function(el, ind){
+                tags.push(list[index].tags[ind]);
             });          
         });
 

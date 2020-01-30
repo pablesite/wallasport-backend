@@ -4,10 +4,10 @@ const mongoose = require('mongoose');
 
 const anuncioSchema = mongoose.Schema({
     nombre: {type: String, unique: true},
-    venta: Boolean,
+    venta: String,
     precio: Number,
     foto: String, 
-    tag: [String]
+    tags: [String]
 });
 
 
@@ -52,18 +52,19 @@ anuncioSchema.statics.list = function(filter, limit, skip, fields, sort, cb) {
         }
         Object.keys(filtradoPrecios).forEach((key) => filtrado[key] = filtradoPrecios[key]);
     }
-
+    
     /* Si es un tag, hay que usar condiciones */
-    if (filter.tag){
-        if (typeof filter.tag === 'string') { //si es string, significa que sólo se ha pasado un tag
-            filtradoTag = { tag: filter.tag };
+    if (filter.tags){
+        
+        if (typeof filter.tags === 'string') { //si es string, significa que sólo se ha pasado un tag
+            filtradoTag = { tag: filter.tags };
         } else { // si no, llega un array de tags
             //filtradoTag = { tag: {$in: [filter.tag] } };
             /* la query de arriba no funciona como debería. Hace un filtro AND entre la lista de tag y yo quiero uno OR... 
             * en la documentación dice que hace un filtro or...
             * Implemento la query de abajo, que aunque no es elegante, funciona como yo espero.
             */ 
-            filtradoTag = { $or: [ { tag: filter.tag[0] } , { tag: filter.tag[1] }, { tag: filter.tag[2] }, { tag: filter.tag[3] } ] };
+            filtradoTag = { $or: [ { tag: filter.tags[0] } , { tag: filter.tags[1] }, { tag: filter.tags[2] }, { tag: filter.tags[3] } ] };
         }
         Object.keys(filtradoTag).forEach((key) => filtrado[key] = filtradoTag[key]);
         
