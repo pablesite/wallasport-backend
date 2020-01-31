@@ -37,7 +37,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const i18n = require('./lib/i18nConfigure')(); 
 app.use(i18n.init);
 
-app.locals.title = 'Nodepop';
+app.locals.title = 'Wsbackend';
 
 if (app.locals.JWT === undefined){
   app.locals.JWT = '';
