@@ -32,7 +32,7 @@ Se reaprovecha el script de incialización de base de datos para crear dos usuar
 
 Se puede conseguir un token desde la siguiente URL:
 
-https://localhost:3000/apiv1/login
+https://localhost:3002/apiv1/login
 
 con el usuario:
 
@@ -148,7 +148,7 @@ Esta API ofrece la siguiente funcionalidad:
 Para filtrar anuncios, dirígete a la URL:
 
 ```bash
-https://localhost:3000/apiv1/anuncios
+https://localhost:3002/apiv1/anuncios
 ```
 Esta URL devuelve el listado de todos los anuncios que hay en base de datos. 
 Podemos filtrar:
@@ -210,7 +210,7 @@ Ordena la consulta por el campo indicado en nombre_campo.
 
 Los filtros se pueden combinar, de manera que puede quedar una consulta como la siguiente:
 ```bash
-https://localhost:3000/apiv1/anuncios?tag=mobile&venta=false&no
+https://localhost:3002/apiv1/anuncios?tag=mobile&venta=false&no
 mbre=ip&precio=50-&skip=3&limit=2&sort=precio
 ```
 
@@ -218,7 +218,7 @@ mbre=ip&precio=50-&skip=3&limit=2&sort=precio
 Para devolver la lista de tags disponible en los anuncios existentes en nuestra base de datos, dirígete a la URL:
 
 ```bash
-https://localhost:3000/apiv1/tags
+https://localhost:3002/apiv1/tags
 ```
 Esta URL devuelve el listado de las tags disponibles en los anuncios, sin repetirlas. Como máximo, se pueden listar las 4 tags disponibles.
 * work
@@ -232,11 +232,11 @@ La API tiene disponible la creación, edición y borrado de un anuncio.
 Para ello habrá que usar un software de peticiones tipo Postman. El uso de este tipo de software queda fuera del alcance de esta documentación.
 Sí que cabe comentar los tipos de peticiones de cada función:
 * Creación de anuncio 
-Petición POST a la URL https://localhost:3000/apiv1/
+Petición POST a la URL https://localhost:3002/apiv1/
 * Actualización de un anuncio
-Petición PUT a la URL https://localhost:3000/apiv1/:id
+Petición PUT a la URL https://localhost:3002/apiv1/:id
 * Borrado de un anuncio
-Petición DELETE a la URL https://localhost:3000/apiv1/:id
+Petición DELETE a la URL https://localhost:3002/apiv1/:id
 
 Si se quieren probar estas funciones, se deberá conocer el modelo a la hora de introducir el body de la petición (Nuevo: Ahora peticiones de tipo 'form-data'):
     - nombre: String
@@ -249,7 +249,7 @@ Además de la funcionalidad de la API como tal, se ha preparado una página web 
 La web se ha creado con el motor de vistas ejs.
 Se puede acceder con la siguiente url:
 ```bash
-https://localhost:3000/anuncios
+https://localhost:3002/anuncios
 ```
 Esta web permite visualizar los anuncios ligeramente maquetados. Además tiene un par de funcionalidades extras.
 * Buscar
