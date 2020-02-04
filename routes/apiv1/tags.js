@@ -8,7 +8,7 @@ const Anuncio = mongoose.model('Anuncio');
 
 /* Recupero lista de tags */
 router.get('/', function(req, res, next){
- 
+    
     Anuncio.find().exec(function(err, list){
         if (err) {
             next(err);

@@ -34,5 +34,6 @@
 	"Email address.": "Email address.",
 	"Password.": "Password.",
 	"Submit.": "Submit.",
-	"Get a new token for API access.": "Get a new token for API access."
+	"Get a new token for API access.": "Get a new token for API access.",
+	"Invalid signature": "Invalid signature"
 }

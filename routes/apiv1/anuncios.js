@@ -64,7 +64,7 @@ router.get('/:id', function (req, res, next) { // si lo protejo fuera, no hay qu
 
 /* Crear un anuncio */
 router.post('/', function (req, res, next) {
-    
+    console.log('hago POST')
     let anuncio = new Anuncio(req.body);
     // lanzo el cliente para generar el thumbnail
     thumbnailClient.cliente(path.join('img/', req.body.foto));
