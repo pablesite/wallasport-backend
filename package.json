@@ -15,6 +15,7 @@
     "testpublic": "node_modules/.bin/eslint ./public/**"
   },
   "dependencies": {
+    "@toptensoftware/losangeles": "^0.3.4",
     "cookie-parser": "~1.4.4",
     "cross-env": "^5.2.0",
     "debug": "~2.6.9",

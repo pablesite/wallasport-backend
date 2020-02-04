@@ -32,20 +32,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 /* ------------------------------------------------------------------ */
 /**
- * Setup i18n
- */
-const i18n = require('./lib/i18nConfigure')(); 
-app.use(i18n.init);
-
-app.locals.title = 'Wsbackend';
-
-if (app.locals.JWT === undefined){
-  app.locals.JWT = '';
-}
-
-
-/* ------------------------------------------------------------------ */
-/**
  * Inicializamos y cargamos la sesión del usuario que hace la petición
  */
 app.use(session({
@@ -70,6 +56,7 @@ app.use((req, res, next) => {
   next();
 });
 
+// middlewares para permitir CORS desde el frontal.
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", process.env.URL_CORS); // update to match the domain you will make the request from
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
@@ -77,25 +64,29 @@ app.use(function(req, res, next) {
   next();
 });
 
+app.options("/*", function(req, res, next){
+  res.header('Access-Control-Allow-Origin', process.env.URL_CORS);
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  // res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+  res.send(200);
+});
 
-/* ------------------------------------------------------------------ */
-/** Rutas de mi aplicación web */
-const sessionAuth = require('./lib/sessionAuth');
-const loginController = require('./routes/loginController');
+
+
+
+const la = require('@toptensoftware/losangeles');
+
+app.use(la.serve({
+  contentPath: path.join(__dirname, 'public')
+}).middleware);
 
 app.use('/',                require('./routes/index'));
-app.use('/change-locale',   require('./routes/change-locale'));
-app.use('/anuncios',  sessionAuth('admin'),  require('./routes/anuncios'));
-
-// Usamos el estilo de Controladores para estructurar las rutas siguientes:
-app.get('/login',           loginController.index);
-app.post('/login',          loginController.post);
-app.get('/logout',          loginController.logout);
-
 
 
 /* ------------------------------------------------------------------ */
 /** Rutas de mi API */
+
+
 
 const jwtAuth = require('./lib/jwtAuth');
 //const loginControllerAPI = require('./routes/apiv1/loginController');
@@ -114,14 +105,20 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-app.get('/apiv1/enterJWT', function(req, res, next){
-  app.locals.JWT = req.query.token;
-  res.redirect('/');
-});
-
 app.use('/apiv1/login',  require('./routes/apiv1/loginAPIController'));
+
+
+const anunciosController = require('./routes/apiv1/anuncios');
 //app.use('/apiv1/anuncios', upload.single('foto'), jwtAuth(), require('./routes/apiv1/anuncios')); Separar en diferentes métodos para poder securizar con middleware...
-app.use('/apiv1/anuncios', require('./routes/apiv1/anuncios'));
+//app.use('/apiv1/anuncios', require('./routes/apiv1/anuncios')); //es el bueno de las pruebas
+
+app.get('/apiv1/anuncios', anunciosController.get);
+app.get('/apiv1/anuncios/:id',  anunciosController.getOneAdvert);
+app.post('/apiv1/anuncios', anunciosController.post);
+app.put('/apiv1/anuncios/:id', anunciosController.put);
+app.delete('/apiv1/anuncios/:id', anunciosController.delete);
+
+
 app.use('/apiv1/tags', require('./routes/apiv1/tags'));
 
 

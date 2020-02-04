@@ -1,54 +1,9 @@
 <% include header.html %>
 
-<section class="page-section clearfix">
-  <div class="container">
-    <div class="intro">
-      <img class="intro-img img-fluid mb-3 mb-lg-0 rounded" src="img/intro.jpg" alt="">
-      <div class="intro-text left-0 text-center bg-faded p-5 rounded">
-        <h2 class="section-heading mb-4">
-          <span class="section-heading-upper"><%= __('Welcome to') %>:</span>
-          <span class="section-heading-lower"><%= __('Your API of adverts') %> </span>
-        </h2>
-        <p><%= __('Your JWT is:') %> </p>
-
-        <% if(JWT === '') { %>
-        <p><%= __('Go to /apiv1/login to obtain a new token.') %></p>
-        <%}%>
-        <p style="width: 400px;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;"  > <%=JWT%></p>
-
-        <p><%= __('Click') %> <a href="/apiv1/anuncios?token=<%=JWT%>"><%= __('here') %></a>
-          <%= __('in order to use the app prepared for you.') %></p>
-        <p><%= __('Click') %> <a href="/apiv1/tags?token=<%=JWT%>"><%= __('here') %></a>
-          <%= __('to use the functionality that filter available tags.') %></p>
-
-        <form action="./apiv1/enterJWT" method="get">
-          <p><%= __('Enter your JWT:') %> <input type="text" name="token"></p>
-          <input type="submit" value="Enviar">
-        </form>
-
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="page-section cta">
-  <div class="container">
-    <div class="row">
-      <div class="col-xl-9 mx-auto">
-        <div class="cta-inner text-center rounded">
-          <h2 class="section-heading mb-4">
-            <span class="section-heading-upper"><%= __('Also now in:') %></span>
-            <span class="section-heading-lower"><%= __('Front End') %></span>
-          </h2>
-          <p class="mb-0"><%= __('If you want to see results in a view, click ') %> <a
-              href="/anuncios"><%= __('here') %></a></p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<main class="layout">
+<p class="apiInfo">
+  Bienvenido a la API de WallaSport. Puedes hacer uso de la misma a través de <a href="https://wsfrontend.codinglab.es/">WallaSport</a> 
+</p>
+</main>
 
 <% include footer.html %>
