@@ -5,6 +5,7 @@ const bcrypy = require('bcrypt');
 
 
 const usuarioSchema = mongoose.Schema({
+    username: String,
     email: { type: String, unique: true },
     password: String,
 }, 
@@ -14,8 +15,8 @@ const usuarioSchema = mongoose.Schema({
 
 );
 
-usuarioSchema.statics.hashPassword = function(plainPassword) {
-    return bcrypy.hash(plainPassword, 10);
+usuarioSchema.statics.hashPassword = function(password) {
+    return bcrypy.hash(password, 10);
 }
 
 const Usuario = mongoose.model('Usuario', usuarioSchema);

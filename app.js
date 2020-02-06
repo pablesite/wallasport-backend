@@ -68,7 +68,7 @@ app.options("/*", function(req, res, next){
   res.header('Access-Control-Allow-Origin', process.env.URL_CORS);
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
   // res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-  res.send(200);
+  res.sendStatus(200);
 });
 
 
@@ -106,6 +106,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 app.use('/apiv1/login',  require('./routes/apiv1/loginAPIController'));
+app.use('/apiv1/register',  require('./routes/apiv1/registerNewUser'));
 
 
 const anunciosController = require('./routes/apiv1/anuncios');

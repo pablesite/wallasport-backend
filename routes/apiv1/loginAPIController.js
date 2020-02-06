@@ -10,11 +10,11 @@ const Usuario = require('../../models/Usuario');
 router.post('/', async function (req, res, next) {
         try {
             // Request credentials are collected
-            const email = req.body.email;
+            const username = req.body.username;
             const password = req.body.password;
             
             // The user is searched in the database
-            const usuario = await Usuario.findOne({ email: email });
+            const usuario = await Usuario.findOne({ username: username });
 
             // If the user is not found, invalid credentials
             if (!usuario || !await bcrypt.compare(password, usuario.password)) {
