@@ -1,0 +1,99 @@
+{
+    "adverts": [
+        {
+            "userOwner": "pablesite",
+            "name": "Orbea H20 del 2017",
+            "description": "Vendo bicicleta Orbea H20 en perfecto estado. Pocos kilómetros. Se valora negociación.",
+            "photo": "bici.jpg",
+            "type": true,
+            "price": 830.15,
+            "tags": [ "orbea", "bikes", "mtb"],
+            "reserved": false,
+            "sold": false
+         },
+
+         {
+            "userOwner": "pablesite",
+            "name": "Orbea H20 del 2018",
+            "description": "Vendo bicicleta Orbea H20 en perfecto estado. Pocos kilómetros. Se valora negociación.",
+            "photo": "bici.jpg",
+            "type": true,
+            "price": 830.15,
+            "tags": [ "orbea", "bikes", "mtb"],
+            "reserved": false,
+            "sold": false
+         },
+
+         {
+            "userOwner": "pablesite",
+            "name": "Orbea H20 del 2019",
+            "description": "Vendo bicicleta Orbea H20 en perfecto estado. Pocos kilómetros. Se valora negociación.",
+            "photo": "bici.jpg",
+            "type": true,
+            "price": 830.15,
+            "tags": [ "orbea", "bikes", "mtb"],
+            "reserved": false,
+            "sold": false
+         },
+
+         {
+            "userOwner": "pablesite",
+            "name": "Orbea H20 del 2020",
+            "description": "Vendo bicicleta Orbea H20 en perfecto estado. Pocos kilómetros. Se valora negociación.",
+            "photo": "bici.jpg",
+            "type": true,
+            "price": 830.15,
+            "tags": [ "orbea", "bikes", "mtb"],
+            "reserved": false,
+            "sold": false
+         },
+
+         {
+            "userOwner": "pablesite",
+            "name": "Orbea H20 del 2021",
+            "description": "Vendo bicicleta Orbea H20 en perfecto estado. Pocos kilómetros. Se valora negociación.",
+            "photo": "bici.jpg",
+            "type": true,
+            "price": 830.15,
+            "tags": [ "orbea", "bikes", "mtb"],
+            "reserved": false,
+            "sold": false
+         },
+
+         {
+            "userOwner": "pablesite",
+            "name": "Orbea H20 del 2022",
+            "description": "Vendo bicicleta Orbea H20 en perfecto estado. Pocos kilómetros. Se valora negociación.",
+            "photo": "bici.jpg",
+            "type": true,
+            "price": 830.15,
+            "tags": [ "orbea", "bikes", "mtb"],
+            "reserved": false,
+            "sold": false
+         },
+
+         {
+            "userOwner": "pablesite",
+            "name": "Orbea H20 del 2023",
+            "description": "Vendo bicicleta Orbea H20 en perfecto estado. Pocos kilómetros. Se valora negociación.",
+            "photo": "bici.jpg",
+            "type": true,
+            "price": 830.15,
+            "tags": [ "orbea", "bikes", "mtb"],
+            "reserved": false,
+            "sold": false
+         },
+
+         {
+            "userOwner": "pablesite",
+            "name": "Orbea H20 del 2024",
+            "description": "Vendo bicicleta Orbea H20 en perfecto estado. Pocos kilómetros. Se valora negociación.",
+            "photo": "bici.jpg",
+            "type": true,
+            "price": 830.15,
+            "tags": [ "orbea", "bikes", "mtb"],
+            "reserved": false,
+            "sold": false
+         }
+    ]
+}

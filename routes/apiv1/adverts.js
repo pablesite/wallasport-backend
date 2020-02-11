@@ -1,15 +1,15 @@
 'use strict';
 
 const mongoose = require('mongoose');
-const Anuncio = mongoose.model('Anuncio');
+const Advert = mongoose.model('Advert');
 const thumbnailClient = require('../../lib/microservices/thumbnailClient')
 const path = require('path');
 
 
-class AnunciosController {
+class AdvertsController {
 
     /* Recupero los parámetros que me entran en la ruta */
-    get(req, res, next) { // si lo protejo fuera, no hay que ponerlo otra vez aquí (jwtAuth)
+    get(req, res, next) {
 
         let filter = {};
 
@@ -17,13 +17,13 @@ class AnunciosController {
             filter.nombre = req.query.nombre;
         }
 
-        if (req.query.venta) {
-            filter.venta = req.query.venta;
-        }
-
         if (req.query.precio) {
             filter.precio = req.query.precio;
         }
+
+        // if (req.query.venta) {
+        //     filter.venta = req.query.venta;
+        // }
 
         if (req.query.tag) {
             filter.tag = req.query.tag;
@@ -32,10 +32,11 @@ class AnunciosController {
         let limit = parseInt(req.query.limit) || null;
         let skip = parseInt(req.query.skip) || null;
         let fields = req.query.fields || null;
-        let sort = req.query.sort || '_id'; //lo del id?
+        let sort = req.query.sort || '_id'; //lo del id? // Esto habrá que modificarlo para que me devuelva los más antiguos o los más recientes.
+
 
         /* Hago la consulta según los parámetros que me han entrado */
-        Anuncio.list(filter, limit, skip, fields, sort, function (err, list) {
+        Advert.list(filter, limit, skip, fields, sort, function (err, list) {
             if (err) {
                 next(err);
                 return;
@@ -52,7 +53,7 @@ class AnunciosController {
 
         let id = req.params.id;
 
-        Anuncio.find({ _id: id }, function (err, list) {
+        Advert.find({ _id: id }, function (err, list) {
             if (err) {
                 next(err);
                 return;
@@ -63,36 +64,39 @@ class AnunciosController {
         })
     };
 
-    /* Crear un anuncio */
+    /* An advert is created */
     post(req, res, next) {
 
-        let anuncio = new Anuncio(req.body);
+        let advert = new Advert(req.body);
+        advert.creationDate=Date.now();
+   
+        console.log('Advert ' , advert)
         // lanzo el cliente para generar el thumbnail
-        thumbnailClient.cliente(path.join('img/', req.body.foto));
-
-        anuncio.save(function (err, anuncioGuardado) {
+        // thumbnailClient.cliente(path.join('img/', req.body.foto)); //no funciona y no sé por qué
+    
+        advert.save(function (err, saveAdvert) {
             if (err) {
                 return next(err);
             }
-            res.json({ ok: true, anuncio: anuncioGuardado });
+            res.json({ ok: true, advert: saveAdvert });
         });
     };
 
-    /* Actualizar un anuncio */
+    /* Actualizar un advert */
     put(req, res, next) {
         let id = req.params.id;
-        Anuncio.update({ _id: id }, req.body, function (err, anuncio) {
+        Advert.update({ _id: id }, req.body, function (err, advert) {
             if (err) {
                 return next(err);
             }
-            res.json({ ok: true, anuncio: anuncio });
+            res.json({ ok: true, advert: advert });
         });
     };
 
-    /* Borrar un anuncio */
+    /* Borrar un advert */
     delete(req, res, next) {
         let id = req.params.id;
-        Anuncio.remove({ _id: id }, function (err, result) {
+        Advert.remove({ _id: id }, function (err, result) {
             if (err) {
                 return next(err);
             }
@@ -102,4 +106,4 @@ class AnunciosController {
 
 }
 
-module.exports = new AnunciosController();
+module.exports = new AdvertsController();

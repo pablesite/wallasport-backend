@@ -8,7 +8,8 @@ const MongoStore = require('connect-mongo')(session);
 const multer  = require('multer');
 const app = express();
 const mongooseConnection = require('./lib/connectMongoose');
-require('./models/Anuncio');
+require('./models/Advert');
+
 
 
 /* ------------------------------------------------------------------ */
@@ -22,6 +23,7 @@ app.use(logger('dev'));
 
 // for parsing application/json
 app.use(express.json());
+
 
 // for parsing application/xwww-form-urlencoded
 app.use(express.urlencoded({ extended: false }));
@@ -71,25 +73,16 @@ app.options("/*", function(req, res, next){
   res.sendStatus(200);
 });
 
-
-
-
-const la = require('@toptensoftware/losangeles');
-
-app.use(la.serve({
-  contentPath: path.join(__dirname, 'public')
-}).middleware);
-
-app.use('/',                require('./routes/index'));
+ app.use('/',                require('./routes/index'));
 
 
 /* ------------------------------------------------------------------ */
 /** Rutas de mi API */
 
 
-
 const jwtAuth = require('./lib/jwtAuth');
 //const loginControllerAPI = require('./routes/apiv1/loginController');
+
 
 // Configuración de Multer, para subir ficheros.
 const storage = multer.diskStorage({
@@ -97,7 +90,7 @@ const storage = multer.diskStorage({
     cb(null, 'public/img/')
   },
   filename: function (req, file, cb) {
-    req.body.foto = file.originalname;
+    req.body.photo = file.originalname;
     cb(null, file.originalname)
 
   }
@@ -109,15 +102,15 @@ app.use('/apiv1/login',  require('./routes/apiv1/loginAPIController'));
 app.use('/apiv1/register',  require('./routes/apiv1/registerNewUser'));
 
 
-const anunciosController = require('./routes/apiv1/anuncios');
-//app.use('/apiv1/anuncios', upload.single('foto'), jwtAuth(), require('./routes/apiv1/anuncios')); Separar en diferentes métodos para poder securizar con middleware...
-//app.use('/apiv1/anuncios', require('./routes/apiv1/anuncios')); //es el bueno de las pruebas
+const advertsController = require('./routes/apiv1/adverts');
+//app.use('/apiv1/adverts', upload.single('foto'), jwtAuth(), require('./routes/apiv1/adverts')); Separar en diferentes métodos para poder securizar con middleware...
+//app.use('/apiv1/adverts', require('./routes/apiv1/adverts')); //es el bueno de las pruebas
 
-app.get('/apiv1/anuncios', anunciosController.get);
-app.get('/apiv1/anuncios/:id',  anunciosController.getOneAdvert);
-app.post('/apiv1/anuncios', anunciosController.post);
-app.put('/apiv1/anuncios/:id', anunciosController.put);
-app.delete('/apiv1/anuncios/:id', anunciosController.delete);
+app.get('/apiv1/adverts', advertsController.get);
+app.get('/apiv1/adverts/:id',  advertsController.getOneAdvert);
+app.post('/apiv1/adverts', jwtAuth(), upload.single('photo'), advertsController.post);
+app.put('/apiv1/adverts/:id', advertsController.put);
+app.delete('/apiv1/adverts/:id', advertsController.delete);
 
 
 app.use('/apiv1/tags', require('./routes/apiv1/tags'));

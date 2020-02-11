@@ -3,19 +3,19 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const Anuncio = mongoose.model('Anuncio');
+const Advert = mongoose.model('Advert');
 
 
 /* Recupero lista de tags */
 router.get('/', function(req, res, next){
     
-    Anuncio.find().exec(function(err, list){
+    Advert.find().exec(function(err, list){
         if (err) {
             next(err);
             return;
         }
 
-        /* Obtengo las tags de cada anuncio y las pongo en el array tags */
+        /* Obtengo las tags de cada advert y las pongo en el array tags */
         let tags = [];
         list.forEach(function(element, index){
             list[index].tags.forEach(function(el, ind){

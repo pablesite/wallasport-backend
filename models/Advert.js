@@ -2,16 +2,23 @@
 
 const mongoose = require('mongoose');
 
-const anuncioSchema = mongoose.Schema({
-    nombre: {type: String, unique: true},
-    venta: String,
-    precio: Number,
-    foto: String, 
-    tags: [String]
+const advertSchema = mongoose.Schema({
+    creationDate: Date,
+    userOwner: String,
+    name: {type: String, unique: true},
+    description: String,
+    photo: String, 
+    type: Boolean,
+    price: Number,
+    tags: [String],
+    reserved: Boolean,
+    sold: Boolean,
+    //chat: Object,
+
 });
 
 
-anuncioSchema.statics.list = function(filter, limit, skip, fields, sort, cb) {
+advertSchema.statics.list = function(filter, limit, skip, fields, sort, cb) {
     /* Compruebo qué viene en el filtro */
 
     let query;
@@ -28,11 +35,11 @@ anuncioSchema.statics.list = function(filter, limit, skip, fields, sort, cb) {
         Object.keys(filtradoNombre).forEach((key) => filtrado[key] = filtradoNombre[key]);
     }
 
-    /* Si es un tipo de anuncio, se filtra simplemente tal cual */
-    if (filter.venta){
-        filtradoVenta = {venta: filter.venta};
-        Object.keys(filtradoVenta).forEach((key) => filtrado[key] = filtradoVenta[key]);
-    }
+    // /* Si es un tipo de anuncio, se filtra simplemente tal cual */
+    // if (filter.venta){
+    //     filtradoVenta = {venta: filter.venta};
+    //     Object.keys(filtradoVenta).forEach((key) => filtrado[key] = filtradoVenta[key]);
+    // }
     
     /* Si es un precio, hay que usar combinaciones */
     if (filter.precio){
@@ -71,7 +78,7 @@ anuncioSchema.statics.list = function(filter, limit, skip, fields, sort, cb) {
     }
 
     /* Hago la búsqueda combinada con todos los filtros que han pasado por parámetro */
-    query = Anuncio.find(filtrado);
+    query = Advert.find(filtrado);
                                 
     query.limit(limit);
     query.skip(skip);
@@ -81,7 +88,7 @@ anuncioSchema.statics.list = function(filter, limit, skip, fields, sort, cb) {
 };
 
 
-const Anuncio = mongoose.model('Anuncio', anuncioSchema);
+const Advert = mongoose.model('Advert', advertSchema);
 
 // Creación de índices en los campos en los que haremos búsquedas. 
 // Esto mejora en mucho la velocidad de consulta de la db

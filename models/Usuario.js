@@ -5,9 +5,10 @@ const bcrypy = require('bcrypt');
 
 
 const usuarioSchema = mongoose.Schema({
-    username: String,
+    username: { type: String, unique: true },
     email: { type: String, unique: true },
     password: String,
+    favs: [String],
 }, 
 { 
     collection: 'usuarios' //me salto la pluralización
