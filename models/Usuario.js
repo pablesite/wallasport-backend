@@ -8,7 +8,7 @@ const usuarioSchema = mongoose.Schema({
     username: { type: String, unique: true },
     email: { type: String, unique: true },
     password: String,
-    favs: [String],
+    favs: [String], //solución compañero: favs: [{type: Schema.Types.ObjectId, ref: 'Advert'}]
 }, 
 { 
     collection: 'usuarios' //me salto la pluralización

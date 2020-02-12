@@ -6,6 +6,7 @@ const advertSchema = mongoose.Schema({
     creationDate: Date,
     userOwner: String,
     name: {type: String, unique: true},
+    slugName: {type: String, unique: true},
     description: String,
     photo: String, 
     type: Boolean,
@@ -18,21 +19,26 @@ const advertSchema = mongoose.Schema({
 });
 
 
+
+
+
+
+
 advertSchema.statics.list = function(filter, limit, skip, fields, sort, cb) {
     /* Compruebo qué viene en el filtro */
 
     let query;
-    let filtradoNombre = {};
-    let filtradoVenta = {};
-    let filtradoPrecios = {};
-    let filtradoTag = {};
+    let nameFilter = {};
+    // let filtradoVenta = {};
+    let priceFilter = {};
+    let tagFilter = {};
 
-    let filtrado={};
+    let filtering={};
 
     /* Si es un nombre, se filtra con una expresión regular que permite buscar por los primeros caracteres del nombre */
-    if (filter.nombre){
-        filtradoNombre = { nombre: new RegExp('^'+ filter.nombre, 'i') };
-        Object.keys(filtradoNombre).forEach((key) => filtrado[key] = filtradoNombre[key]);
+    if (filter.name){
+        nameFilter = { name: new RegExp('^'+ filter.name, 'i') };
+        Object.keys(nameFilter).forEach((key) => filtering[key] = nameFilter[key]);
     }
 
     // /* Si es un tipo de anuncio, se filtra simplemente tal cual */
@@ -42,38 +48,38 @@ advertSchema.statics.list = function(filter, limit, skip, fields, sort, cb) {
     // }
     
     /* Si es un precio, hay que usar combinaciones */
-    if (filter.precio){
-        let precios = filter.precio.split('-');
+    if (filter.price){
+        let prices = filter.price.split('-');
         
         if (precios.length === 2){
-            if (precios[0] ===''){
-                filtradoPrecios = { precio:  { '$lte': precios[1] }};
-            } else if (precios[1] === ''){
-                filtradoPrecios = { precio:  { '$gte': precios[0] } };
+            if (prices[0] ===''){
+                priceFilter = { price:  { '$lte': prices[1] }};
+            } else if (prices[1] === ''){
+                priceFilter = { price:  { '$gte': prices[0] } };
             } else {
-                filtradoPrecios = { precio:  { '$gte': precios[0], '$lte': precios[1] } };
+                priceFilter = { price:  { '$gte': prices[0], '$lte': prices[1] } };
             }
 
-        } else if (precios.length === 1){
-            filtradoPrecios = { precio: parseFloat(precios) };
+        } else if (prices.length === 1){
+            priceFilter = { price: parseFloat(prices) };
         }
-        Object.keys(filtradoPrecios).forEach((key) => filtrado[key] = filtradoPrecios[key]);
+        Object.keys(priceFilter).forEach((key) => filtering[key] = priceFilter[key]);
     }
     
     /* Si es un tag, hay que usar condiciones */
     if (filter.tags){
         
         if (typeof filter.tags === 'string') { //si es string, significa que sólo se ha pasado un tag
-            filtradoTag = { tag: filter.tags };
+            tagFilter = { tag: filter.tags };
         } else { // si no, llega un array de tags
-            //filtradoTag = { tag: {$in: [filter.tag] } };
+            //tagFilter = { tag: {$in: [filter.tag] } };
             /* la query de arriba no funciona como debería. Hace un filtro AND entre la lista de tag y yo quiero uno OR... 
             * en la documentación dice que hace un filtro or...
             * Implemento la query de abajo, que aunque no es elegante, funciona como yo espero.
             */ 
-            filtradoTag = { $or: [ { tag: filter.tags[0] } , { tag: filter.tags[1] }, { tag: filter.tags[2] }, { tag: filter.tags[3] } ] };
+           tagFilter = { $or: [ { tag: filter.tags[0] } , { tag: filter.tags[1] }, { tag: filter.tags[2] }, { tag: filter.tags[3] } ] };
         }
-        Object.keys(filtradoTag).forEach((key) => filtrado[key] = filtradoTag[key]);
+        Object.keys(tagFilter).forEach((key) => filtering[key] = tagFilter[key]);
         
     }
 
