@@ -19,11 +19,6 @@ const advertSchema = mongoose.Schema({
 });
 
 
-
-
-
-
-
 advertSchema.statics.list = function(filter, limit, skip, fields, sort, cb) {
     /* Compruebo qué viene en el filtro */
 
@@ -51,7 +46,7 @@ advertSchema.statics.list = function(filter, limit, skip, fields, sort, cb) {
     if (filter.price){
         let prices = filter.price.split('-');
         
-        if (precios.length === 2){
+        if (prices.length === 2){
             if (prices[0] ===''){
                 priceFilter = { price:  { '$lte': prices[1] }};
             } else if (prices[1] === ''){
@@ -67,24 +62,23 @@ advertSchema.statics.list = function(filter, limit, skip, fields, sort, cb) {
     }
     
     /* Si es un tag, hay que usar condiciones */
-    if (filter.tags){
-        
-        if (typeof filter.tags === 'string') { //si es string, significa que sólo se ha pasado un tag
-            tagFilter = { tag: filter.tags };
+    if (filter.tag){
+        if (typeof filter.tag === 'string') { //si es string, significa que sólo se ha pasado un tag
+            tagFilter = { tags: filter.tag };
         } else { // si no, llega un array de tags
             //tagFilter = { tag: {$in: [filter.tag] } };
             /* la query de arriba no funciona como debería. Hace un filtro AND entre la lista de tag y yo quiero uno OR... 
             * en la documentación dice que hace un filtro or...
             * Implemento la query de abajo, que aunque no es elegante, funciona como yo espero.
             */ 
-           tagFilter = { $or: [ { tag: filter.tags[0] } , { tag: filter.tags[1] }, { tag: filter.tags[2] }, { tag: filter.tags[3] } ] };
+           tagFilter = { $or: [ { tag: filter.tag[0] } , { tag: filter.tag[1] }, { tag: filter.tag[2] }, { tag: filter.tag[3] } ] };
         }
         Object.keys(tagFilter).forEach((key) => filtering[key] = tagFilter[key]);
         
     }
 
     /* Hago la búsqueda combinada con todos los filtros que han pasado por parámetro */
-    query = Advert.find(filtrado);
+    query = Advert.find(filtering);
                                 
     query.limit(limit);
     query.skip(skip);

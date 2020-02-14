@@ -106,14 +106,18 @@ const advertsController = require('./routes/apiv1/adverts');
 //app.use('/apiv1/adverts', upload.single('foto'), jwtAuth(), require('./routes/apiv1/adverts')); Separar en diferentes métodos para poder securizar con middleware...
 //app.use('/apiv1/adverts', require('./routes/apiv1/adverts')); //es el bueno de las pruebas
 
+// public routes
 app.get('/apiv1/adverts', advertsController.get);
 app.get('/apiv1/adverts/:id',  advertsController.getOneAdvert);
-app.post('/apiv1/adverts', jwtAuth(), upload.single('photo'), advertsController.post);
-app.put('/apiv1/adverts/:id', advertsController.put);
-app.delete('/apiv1/adverts/:id', advertsController.delete);
-
-
 app.use('/apiv1/tags', require('./routes/apiv1/tags'));
+
+// private rotues
+app.post('/apiv1/adverts', jwtAuth(), upload.single('photo'), advertsController.post);
+app.put('/apiv1/adverts/:slugName', jwtAuth(), upload.single('photo'), advertsController.put);
+app.delete('/apiv1/adverts/:slugName', advertsController.delete);
+
+
+
 
 
 

@@ -25,8 +25,8 @@ class AdvertsController {
         //     filter.type = req.query.type;
         // }
 
-        if (req.query.tags) {
-            filter.tags = req.query.tags;
+        if (req.query.tag) {
+            filter.tag = req.query.tag;
         }
 
         let limit = parseInt(req.query.limit) || null;
@@ -49,9 +49,9 @@ class AdvertsController {
     };
 
 
-
+    // De momento no se usa
     /* Recupero los parámetros que me entran en la ruta */
-    getOneAdvert(req, res, next) { // si lo protejo fuera, no hay que ponerlo otra vez aquí (jwtAuth)
+    getOneAdvert(req, res, next) { 
 
         let id = req.params.id;
 
@@ -84,23 +84,23 @@ class AdvertsController {
 
     /* Actualizar un advert */
     put(req, res, next) {
-        let id = req.params.id;
-        Advert.update({ _id: id }, req.body, function (err, advert) {
+        let slugName = req.params.slugName;
+        Advert.update({ slugName: slugName }, req.body, function (err, info) {
             if (err) {
                 return next(err);
             }
-            res.json({ ok: true, advert: advert });
+            res.json({ ok: true, info: info });
         });
     };
 
     /* Borrar un advert */
     delete(req, res, next) {
-        let id = req.params.id;
-        Advert.remove({ _id: id }, function (err, result) {
+        let slugName = req.params.slugName;
+        Advert.remove({ slugName: slugName }, function (err, info) {
             if (err) {
                 return next(err);
             }
-            res.json({ ok: true, result: result });
+            res.json({ ok: true, info: info });
         });
     };
 
