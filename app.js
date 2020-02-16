@@ -61,10 +61,12 @@ app.use((req, res, next) => {
 // middlewares para permitir CORS desde el frontal.
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", process.env.URL_CORS); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Methods", "GET", "PUT", "POST", "DELETE", "OPTIONS");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  
+
   next();
 });
+
 
 app.options("/*", function(req, res, next){
   res.header('Access-Control-Allow-Origin', process.env.URL_CORS);
@@ -99,8 +101,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 app.use('/apiv1/login',  require('./routes/apiv1/loginAPIController'));
-app.use('/apiv1/register',  require('./routes/apiv1/registerNewUser'));
+app.use('/apiv1/register',  upload.single('photo'), require('./routes/apiv1/registerNewUser'));
 
+app.use('/apiv1/user', jwtAuth(),  upload.single('photo'), require('./routes/apiv1/userController'));
 
 const advertsController = require('./routes/apiv1/adverts');
 //app.use('/apiv1/adverts', upload.single('foto'), jwtAuth(), require('./routes/apiv1/adverts')); Separar en diferentes métodos para poder securizar con middleware...
@@ -108,7 +111,7 @@ const advertsController = require('./routes/apiv1/adverts');
 
 // public routes
 app.get('/apiv1/adverts', advertsController.get);
-app.get('/apiv1/adverts/:id',  advertsController.getOneAdvert);
+app.get('/apiv1/adverts/:id',  advertsController.goToAdvertDetail);
 app.use('/apiv1/tags', require('./routes/apiv1/tags'));
 
 // private rotues

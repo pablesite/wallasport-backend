@@ -51,7 +51,7 @@ class AdvertsController {
 
     // De momento no se usa
     /* Recupero los parámetros que me entran en la ruta */
-    getOneAdvert(req, res, next) { 
+    goToAdvertDetail(req, res, next) { 
 
         let id = req.params.id;
 

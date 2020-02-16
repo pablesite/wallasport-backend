@@ -5,18 +5,21 @@ const mongoose = require('mongoose');
 const advertSchema = mongoose.Schema({
     creationDate: Date,
     userOwner: String,
-    name: {type: String, unique: true},
+    // userOwner: {type: Schema.Types.ObjectId, ref: 'User'},
+    name: {type: String, unique: true, index: true},
     slugName: {type: String, unique: true},
     description: String,
     photo: String, 
     type: Boolean,
-    price: Number,
-    tags: [String],
+    price: { type: Number, index: true },
+    tags: { type: [String], index: true},
     reserved: Boolean,
     sold: Boolean,
     //chat: Object,
 
 });
+
+
 
 
 advertSchema.statics.list = function(filter, limit, skip, fields, sort, cb) {
@@ -89,8 +92,4 @@ advertSchema.statics.list = function(filter, limit, skip, fields, sort, cb) {
 
 
 const Advert = mongoose.model('Advert', advertSchema);
-
-// Creación de índices en los campos en los que haremos búsquedas. 
-// Esto mejora en mucho la velocidad de consulta de la db
-// anuncioSchema.index({nombre: 1, venta: 1, precio: 1, tag: 1 });
 
