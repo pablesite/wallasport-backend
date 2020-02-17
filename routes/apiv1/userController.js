@@ -55,4 +55,17 @@ router.put('/:username', async function (req, res, next) {
 });
 
 
+router.delete('/:username', async function (req, res, next) {
+    let username = req.params.username;
+    User.remove({ username: username }, function (err, info) {
+        if (err) {
+            return next(err);
+        }
+        res.json({ ok: true, info: info });
+    });
+});
+
+    
+
+
 module.exports = router;
