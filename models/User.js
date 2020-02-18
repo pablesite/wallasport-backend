@@ -2,6 +2,8 @@
 
 const mongoose = require('mongoose');
 const bcrypy = require('bcrypt');
+const Schema = mongoose.Schema;
+// const Advert = require('../models/Advert');
 
 
 const userSchema = mongoose.Schema({
@@ -9,7 +11,8 @@ const userSchema = mongoose.Schema({
     email: { type: String, unique: true },
     password: String,
     photo: String, 
-    favs: [String], //solución compañero: favs: [{type: Schema.Types.ObjectId, ref: 'Advert'}]
+    // favs: [String], //solución compañero: favs: [{type: Schema.Types.ObjectId, ref: 'Advert'}]
+    favs: [{type: Schema.Types.ObjectId, ref: 'Advert'}]
 }, 
 // { 
 //     collection: 'users' //me salto la pluralización
