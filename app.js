@@ -8,7 +8,8 @@ const MongoStore = require('connect-mongo')(session);
 const multer  = require('multer');
 const app = express();
 const mongooseConnection = require('./lib/connectMongoose');
-require('./models/Anuncio');
+require('./models/Advert');
+
 
 
 /* ------------------------------------------------------------------ */
@@ -23,25 +24,12 @@ app.use(logger('dev'));
 // for parsing application/json
 app.use(express.json());
 
+
 // for parsing application/xwww-form-urlencoded
 app.use(express.urlencoded({ extended: false }));
 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-
-/* ------------------------------------------------------------------ */
-/**
- * Setup i18n
- */
-const i18n = require('./lib/i18nConfigure')(); 
-app.use(i18n.init);
-
-app.locals.title = 'Wsbackend';
-
-if (app.locals.JWT === undefined){
-  app.locals.JWT = '';
-}
 
 
 /* ------------------------------------------------------------------ */
@@ -70,35 +58,33 @@ app.use((req, res, next) => {
   next();
 });
 
-// middleware para aceptar peticiones de otra aplicación (distinto servidor normalmente, o sino, distinto puerto)
+// middlewares para permitir CORS desde el frontal.
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", process.env.URL_CORS); // update to match the domain you will make the request from
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "GET", "PUT", "POST", "DELETE", "OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+
   next();
 });
 
 
-/* ------------------------------------------------------------------ */
-/** Rutas de mi aplicación web */
-const sessionAuth = require('./lib/sessionAuth');
-const loginController = require('./routes/loginController');
+app.options("/*", function(req, res, next){
+  res.header('Access-Control-Allow-Origin', process.env.URL_CORS);
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  // res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+  res.sendStatus(200);
+});
 
-app.use('/',                require('./routes/index'));
-app.use('/change-locale',   require('./routes/change-locale'));
-app.use('/anuncios',  sessionAuth('admin'),  require('./routes/anuncios'));
-
-// Usamos el estilo de Controladores para estructurar las rutas siguientes:
-app.get('/login',           loginController.index);
-app.post('/login',          loginController.post);
-app.get('/logout',          loginController.logout);
-
+ app.use('/',                require('./routes/index'));
 
 
 /* ------------------------------------------------------------------ */
 /** Rutas de mi API */
 
+
 const jwtAuth = require('./lib/jwtAuth');
-const loginControllerAPI = require('./routes/apiv1/loginController');
+//const loginControllerAPI = require('./routes/apiv1/loginController');
+
 
 // Configuración de Multer, para subir ficheros.
 const storage = multer.diskStorage({
@@ -106,7 +92,7 @@ const storage = multer.diskStorage({
     cb(null, 'public/img/')
   },
   filename: function (req, file, cb) {
-    req.body.foto = file.originalname;
+    req.body.photo = file.originalname;
     cb(null, file.originalname)
 
   }
@@ -114,14 +100,28 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-app.get('/apiv1/enterJWT', function(req, res, next){
-  app.locals.JWT = req.query.token;
-  res.redirect('/');
-});
-app.use('/apiv1/anuncios', upload.single('foto'), jwtAuth(), require('./routes/apiv1/anuncios'));
-app.use('/apiv1/tags', jwtAuth(), require('./routes/apiv1/tags'));
-app.get('/apiv1/login', loginControllerAPI.index);
-app.post('/apiv1/login', loginControllerAPI.loginJWT);
+app.use('/apiv1/login',  require('./routes/apiv1/loginAPIController'));
+app.use('/apiv1/register',  upload.single('photo'), require('./routes/apiv1/registerNewUser'));
+
+app.use('/apiv1/user', jwtAuth(),  upload.single('photo'), require('./routes/apiv1/userController'));
+
+const advertsController = require('./routes/apiv1/adverts');
+//app.use('/apiv1/adverts', upload.single('foto'), jwtAuth(), require('./routes/apiv1/adverts')); Separar en diferentes métodos para poder securizar con middleware...
+//app.use('/apiv1/adverts', require('./routes/apiv1/adverts')); //es el bueno de las pruebas
+
+// public routes
+app.get('/apiv1/adverts', advertsController.get);
+app.get('/apiv1/adverts/:slugName',  advertsController.goToAdvertDetail);
+app.use('/apiv1/tags', require('./routes/apiv1/tags'));
+
+// private rotues
+app.post('/apiv1/adverts', jwtAuth(), upload.single('photo'), advertsController.post);
+app.put('/apiv1/adverts/:slugName', jwtAuth(), upload.single('photo'), advertsController.put);
+app.delete('/apiv1/adverts/:slugName', advertsController.delete);
+
+
+
+
 
 
 /** catch 404 and forward to error handler */
