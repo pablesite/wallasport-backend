@@ -111,7 +111,7 @@ const advertsController = require('./routes/apiv1/adverts');
 
 // public routes
 app.get('/apiv1/adverts', advertsController.get);
-app.get('/apiv1/adverts/:id',  advertsController.goToAdvertDetail);
+app.get('/apiv1/adverts/:slugName',  advertsController.goToAdvertDetail);
 app.use('/apiv1/tags', require('./routes/apiv1/tags'));
 
 // private rotues

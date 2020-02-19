@@ -29,10 +29,14 @@ class AdvertsController {
             filter.tag = req.query.tag;
         }
 
+        if (req.query.userOwner) {
+            filter.userOwner = req.query.userOwner;
+        }
+
         let limit = parseInt(req.query.limit) || null;
         let skip = parseInt(req.query.skip) || null;
         let fields = req.query.fields || null;
-        let sort = req.query.sort || {creationDate: -1}; //lo del id? // Esto habrá que modificarlo para que me devuelva los más antiguos o los más recientes.
+        let sort = req.query.sort || { creationDate: -1 }; //lo del id? // Esto habrá que modificarlo para que me devuelva los más antiguos o los más recientes.
 
 
         /* Hago la consulta según los parámetros que me han entrado */
@@ -49,31 +53,35 @@ class AdvertsController {
     };
 
 
-    // De momento no se usa
-    /* Recupero los parámetros que me entran en la ruta */
-    goToAdvertDetail(req, res, next) { 
+    //funciona guay, pero tendría que ver cómo repartirlo después a cada anuncio
 
-        let id = req.params.id;
+    async goToAdvertDetail(req, res, next) {
+        try {
+            let slugName = req.params.slugName;
 
-        Advert.find({ _id: id }, function (err, list) {
-            if (err) {
-                next(err);
-                return;
-            }
-
+            let advert = await Advert.findOne({ slugName: slugName })
+                .populate({ path: 'userOwner' })
             /* Devuelvo un json */
-            res.json({ ok: true, advert: list[0] });
-        })
+            res.json({ ok: true, advert: advert });
+
+        } catch (err) {
+            next(err);
+        }
+
     };
+
 
     /* An advert is created */
     post(req, res, next) {
 
+
         let advert = new Advert(req.body);
-        advert.creationDate=Date.now();
+
+        advert.creationDate = Date.now();
         // lanzo el cliente para generar el thumbnail
         // thumbnailClient.cliente(path.join('img/', req.body.foto)); //no funciona y no sé por qué
-    
+
+
         advert.save(function (err, saveAdvert) {
             if (err) {
                 return next(err);
@@ -85,7 +93,21 @@ class AdvertsController {
     /* Actualizar un advert */
     put(req, res, next) {
         let slugName = req.params.slugName;
-        Advert.update({ slugName: slugName }, req.body, function (err, info) {
+
+        const newAdvert = {
+            name: req.body.name,
+            slugName: req.body.slugName,
+            description: req.body.description,
+            photo: req.body.photo,
+            type: req.body.type,
+            price: req.body.price,
+            tags: req.body.tags,
+            reserved: req.body.reserved,
+            sold: req.body.sold,
+        }
+     
+
+        Advert.update({ slugName: slugName }, newAdvert, function (err, info) {
             if (err) {
                 return next(err);
             }

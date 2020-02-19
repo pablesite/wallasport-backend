@@ -1,11 +1,12 @@
 'use strict';
 
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const advertSchema = mongoose.Schema({
     creationDate: Date,
-    userOwner: String,
-    // userOwner: {type: Schema.Types.ObjectId, ref: 'User'},
+    //userOwner: String,
+    userOwner: {type: Schema.Types.ObjectId, ref: 'User'},
     name: {type: String, unique: true, index: true},
     slugName: {type: String, unique: true},
     description: String,
@@ -30,7 +31,8 @@ advertSchema.statics.list = function(filter, limit, skip, fields, sort, cb) {
     // let filtradoVenta = {};
     let priceFilter = {};
     let tagFilter = {};
-
+    let userOwnerFilter = {};
+    
     let filtering={};
 
     /* Si es un nombre, se filtra con una expresión regular que permite buscar por los primeros caracteres del nombre */
@@ -80,9 +82,16 @@ advertSchema.statics.list = function(filter, limit, skip, fields, sort, cb) {
         
     }
 
+    if (filter.userOwner){
+        userOwnerFilter = { userOwner: filter.userOwner };
+        Object.keys(userOwnerFilter).forEach((key) => filtering[key] = userOwnerFilter[key]);
+    }
+
+
     /* Hago la búsqueda combinada con todos los filtros que han pasado por parámetro */
-    query = Advert.find(filtering);
-                                
+    query = Advert.find(filtering).populate({ path: 'userOwner' }) //revisar lo del populate
+
+                     
     query.limit(limit);
     query.skip(skip);
     query.select(fields);

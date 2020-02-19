@@ -10,14 +10,10 @@ const User = require('../../models/User');
 
 router.get('/:username', async function (req, res, next) {
     try {
-// CUIDADO, Según coja los usuarios, esto será un id de tipo string (normal) o un objeto con _id (populate).
+
         const username = req.params.username;
-   
 
         let user = await User.findOne({ username: username });
-
-        //el populate va así! Sirve para buscar los anuncios favoritos del usuario
-        //let user = await User.findOne({ username: username }).populate('favs')
 
         if (req.apiUserId != user._id) {
             res.json({ success: false, error: 'You do not permission for this info.' });
@@ -26,6 +22,47 @@ router.get('/:username', async function (req, res, next) {
 
         // Password is not returned!
         user = {
+            _id: user._id,
+            username: user.username,
+            email: user.email,
+            photo: user.photo,
+            favs: user.favs,
+        }
+
+        res.json({ success: true, user: user });
+
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.get('/:username/:populate/:sort', async function (req, res, next) {
+    try {
+        // CUIDADO, Según coja los usuarios, esto será un id de tipo string (normal) o un objeto con _id (populate).
+        const { username, populate, sort } = req.params;
+        // const populate = req.params.populate;
+
+        //el populate va así! Sirve para buscar los anuncios favoritos del usuario
+        let user = await User.findOne({ username: username })
+            .populate({
+                path: populate,
+                populate: {
+                    path: 'userOwner'
+                },
+                options: {
+                    sort: sort
+                }
+            })
+
+
+        if (req.apiUserId != user._id) {
+            res.json({ success: false, error: 'You do not permission for this info.' });
+            return;
+        }
+
+        // Password is not returned!
+        user = {
+            _id: user._id,
             username: user.username,
             email: user.email,
             photo: user.photo,
@@ -56,11 +93,11 @@ router.put('/:username', async function (req, res, next) {
         }
 
         // favourites are introduced or removed from the list.
-        if (req.body.favs) {        
+        if (req.body.favs) {
             if (user.favs.find(e => e == req.body.favs)) {
                 // pop elemento of the list
-                let i = user.favs.indexOf( req.body.favs );
-                i !== -1 && user.favs.splice( i, 1 );              
+                let i = user.favs.indexOf(req.body.favs);
+                i !== -1 && user.favs.splice(i, 1);
             } else {
                 // push element in the list
                 user.favs.push({ _id: req.body.favs })
