@@ -81,6 +81,8 @@ class AdvertsController {
         // lanzo el cliente para generar el thumbnail
         // thumbnailClient.cliente(path.join('img/', req.body.foto)); //no funciona y no sé por qué
 
+        const separator = ",";
+        advert.tags = advert.tags[0].split(separator);
 
         advert.save(function (err, saveAdvert) {
             if (err) {
@@ -93,21 +95,25 @@ class AdvertsController {
     /* Actualizar un advert */
     put(req, res, next) {
         let slugName = req.params.slugName;
+        
+        let tags = [];
+        const separator = ",";
+        tags = req.body.tags.split(separator)
 
-        const newAdvert = {
+        const updateAdvert = {
             name: req.body.name,
             slugName: req.body.slugName,
             description: req.body.description,
             photo: req.body.photo,
             type: req.body.type,
             price: req.body.price,
-            tags: req.body.tags,
+            tags: tags,
             reserved: req.body.reserved,
             sold: req.body.sold,
         }
      
 
-        Advert.update({ slugName: slugName }, newAdvert, function (err, info) {
+        Advert.update({ slugName: slugName }, updateAdvert, function (err, info) {
             if (err) {
                 return next(err);
             }
