@@ -5,9 +5,6 @@ const router = express.Router();
 const User = require('../../models/User');
 
 
-// const Advert = require('../../models/Advert');
-
-
 router.get('/:username', async function (req, res, next) {
     try {
 
@@ -38,11 +35,9 @@ router.get('/:username', async function (req, res, next) {
 
 router.get('/:username/:populate/:sort', async function (req, res, next) {
     try {
-        // CUIDADO, Según coja los usuarios, esto será un id de tipo string (normal) o un objeto con _id (populate).
-        const { username, populate, sort } = req.params;
-        // const populate = req.params.populate;
 
-        //el populate va así! Sirve para buscar los anuncios favoritos del usuario
+        const { username, populate, sort } = req.params;
+
         let user = await User.findOne({ username: username })
             .populate({
                 path: populate,

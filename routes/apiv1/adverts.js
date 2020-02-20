@@ -1,9 +1,7 @@
 'use strict';
-
 const mongoose = require('mongoose');
+
 const Advert = mongoose.model('Advert');
-// const thumbnailClient = require('../../lib/microservices/thumbnailClient')
-// const path = require('path');
 
 
 class AdvertsController {
@@ -21,10 +19,6 @@ class AdvertsController {
             filter.price = req.query.price;
         }
 
-        // if (req.query.type) {
-        //     filter.type = req.query.type;
-        // }
-
         if (req.query.tag) {
             filter.tag = req.query.tag;
         }
@@ -36,7 +30,7 @@ class AdvertsController {
         let limit = parseInt(req.query.limit) || null;
         let skip = parseInt(req.query.skip) || null;
         let fields = req.query.fields || null;
-        let sort = req.query.sort || { creationDate: -1 }; //lo del id? // Esto habrá que modificarlo para que me devuelva los más antiguos o los más recientes.
+        let sort = req.query.sort || { creationDate: -1 };
 
 
         /* Hago la consulta según los parámetros que me han entrado */
@@ -53,15 +47,13 @@ class AdvertsController {
     };
 
 
-    //funciona guay, pero tendría que ver cómo repartirlo después a cada anuncio
-
     async goToAdvertDetail(req, res, next) {
         try {
             let slugName = req.params.slugName;
 
             let advert = await Advert.findOne({ slugName: slugName })
                 .populate({ path: 'userOwner' })
-            /* Devuelvo un json */
+
             res.json({ ok: true, advert: advert });
 
         } catch (err) {
@@ -74,12 +66,9 @@ class AdvertsController {
     /* An advert is created */
     post(req, res, next) {
 
-
         let advert = new Advert(req.body);
 
         advert.creationDate = Date.now();
-        // lanzo el cliente para generar el thumbnail
-        // thumbnailClient.cliente(path.join('img/', req.body.foto)); //no funciona y no sé por qué
 
         const separator = ",";
         advert.tags = advert.tags[0].split(separator);
@@ -92,10 +81,11 @@ class AdvertsController {
         });
     };
 
+
     /* Actualizar un advert */
     put(req, res, next) {
         let slugName = req.params.slugName;
-        
+
         let tags = [];
         const separator = ",";
         tags = req.body.tags.split(separator)
@@ -111,7 +101,6 @@ class AdvertsController {
             reserved: req.body.reserved,
             sold: req.body.sold,
         }
-     
 
         Advert.update({ slugName: slugName }, updateAdvert, function (err, info) {
             if (err) {

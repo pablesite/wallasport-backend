@@ -3,13 +3,10 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
-const multer  = require('multer');
+const multer = require('multer');
 const app = express();
-const mongooseConnection = require('./lib/connectMongoose');
+require('./lib/connectMongoose');
 require('./models/Advert');
-
 
 
 /* ------------------------------------------------------------------ */
@@ -24,7 +21,6 @@ app.use(logger('dev'));
 // for parsing application/json
 app.use(express.json());
 
-
 // for parsing application/xwww-form-urlencoded
 app.use(express.urlencoded({ extended: false }));
 
@@ -32,34 +28,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-/* ------------------------------------------------------------------ */
-/**
- * Inicializamos y cargamos la sesión del usuario que hace la petición
- */
-app.use(session({
-  name: 'nodeapi-session',
-  secret: 'l]~G4zXFW%0uZ^dJ30+?A/b1?=bH)8 82kR(J}3O"8E8>;9@&nuS^Me=g>]Vk`em', //mirar en el curso si esto va en el .env 
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    secure: true, //solo mandar por HTTPS
-    maxAge: 1000 * 60 * 60 * 24 * 2 // caducar a los X días de inactividad
-  },
-  store: new MongoStore({
-    // le pasamos cómo conectarse a la bbdd.
-    mongooseConnection: mongooseConnection,
-  })
-
-}));
-
-// middleware para tener acceso a la sesión en las vistas
-app.use((req, res, next) => {
-  res.locals.session = req.session;
-  next();
-});
-
 // middlewares para permitir CORS desde el frontal.
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", process.env.URL_CORS); // update to match the domain you will make the request from
   res.header("Access-Control-Allow-Methods", "GET", "PUT", "POST", "DELETE", "OPTIONS");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
@@ -67,23 +37,15 @@ app.use(function(req, res, next) {
   next();
 });
 
-
-app.options("/*", function(req, res, next){
+app.options("/*", function (req, res, next) {
   res.header('Access-Control-Allow-Origin', process.env.URL_CORS);
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
   // res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
   res.sendStatus(200);
 });
 
- app.use('/',                require('./routes/index'));
 
-
-/* ------------------------------------------------------------------ */
-/** Rutas de mi API */
-
-
-const jwtAuth = require('./lib/jwtAuth');
-//const loginControllerAPI = require('./routes/apiv1/loginController');
+app.use('/', require('./routes/index'));
 
 
 // Configuración de Multer, para subir ficheros.
@@ -94,47 +56,45 @@ const storage = multer.diskStorage({
   filename: function (req, file, cb) {
     req.body.photo = file.originalname;
     cb(null, file.originalname)
-
   }
 })
 
 const upload = multer({ storage: storage });
-
-app.use('/apiv1/login',  require('./routes/apiv1/loginAPIController'));
-app.use('/apiv1/register',  upload.single('photo'), require('./routes/apiv1/registerNewUser'));
-
-app.use('/apiv1/user', jwtAuth(),  upload.single('photo'), require('./routes/apiv1/userController'));
-
+const jwtAuth = require('./lib/jwtAuth');
 const advertsController = require('./routes/apiv1/adverts');
-//app.use('/apiv1/adverts', upload.single('foto'), jwtAuth(), require('./routes/apiv1/adverts')); Separar en diferentes métodos para poder securizar con middleware...
-//app.use('/apiv1/adverts', require('./routes/apiv1/adverts')); //es el bueno de las pruebas
+
+/* ------------------------------------------------------------------ */
+/** Rutas de mi API */
 
 // public routes
+
+app.use('/apiv1/login', require('./routes/apiv1/loginAPIController'));
+app.use('/apiv1/register', upload.single('photo'), require('./routes/apiv1/registerNewUser'));
 app.get('/apiv1/adverts', advertsController.get);
-app.get('/apiv1/adverts/:slugName',  advertsController.goToAdvertDetail);
+app.get('/apiv1/adverts/:slugName', advertsController.goToAdvertDetail);
 app.use('/apiv1/tags', require('./routes/apiv1/tags'));
 
 // private rotues
+app.use('/apiv1/user', jwtAuth(), upload.single('photo'), require('./routes/apiv1/userController'));
 app.post('/apiv1/adverts', jwtAuth(), upload.single('photo'), advertsController.post);
 app.put('/apiv1/adverts/:slugName', jwtAuth(), upload.single('photo'), advertsController.put);
 app.delete('/apiv1/adverts/:slugName', advertsController.delete);
 
 
 
-
 /** catch 404 and forward to error handler */
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 
 /** error handler */
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   /** comprobar error de validación */
   if (err.array) {
     err.status = 422;
-    const errInfo = err.array({onlyFirstError: true})[0];
-    err.message = `Not valid - ${errInfo.param} ${errInfo.msg}`; 
+    const errInfo = err.array({ onlyFirstError: true })[0];
+    err.message = `Not valid - ${errInfo.param} ${errInfo.msg}`;
   }
 
 
@@ -142,11 +102,11 @@ app.use(function(err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  
+
   /** render the error page */
   res.status(err.status || 500);
-  if (isAPI(req)){
-    res.json({ok: false, err: err.message});
+  if (isAPI(req)) {
+    res.json({ ok: false, err: err.message });
     return;
   }
   res.render('error');
