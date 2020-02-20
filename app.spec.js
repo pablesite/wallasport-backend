@@ -31,16 +31,16 @@ describe('endpoints express', function () {
 
     const res = await request(server)
     .post('/apiv1/login')
-    .send({username: 'test', email: 'pablo.ruiz.molina@gmail.com', password: 'NA'})
-    expect(res.status).toBe(500)
+    .send({username: 'test', password: 'NA'})
+    expect(res.status).toBe(200) //return false
   
     done()
   });
 
 
-  it('responds to /apiv1/anuncios', async (done) => {
+  it('responds to /apiv1/adverts', async (done) => {
 
-    const res = await request(server).get('/apiv1/anuncios')
+    const res = await request(server).get('/apiv1/adverts')
 
     expect(res.status).toBe(200)
   

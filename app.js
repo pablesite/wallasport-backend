@@ -67,7 +67,6 @@ const advertsController = require('./routes/apiv1/adverts');
 /** Rutas de mi API */
 
 // public routes
-
 app.use('/apiv1/login', require('./routes/apiv1/loginAPIController'));
 app.use('/apiv1/register', upload.single('photo'), require('./routes/apiv1/registerNewUser'));
 app.get('/apiv1/adverts', advertsController.get);
