@@ -21,12 +21,12 @@ Wallasport es una plataforma que permite la compra y venta de productos de segun
 ### Detalles técnicos a destacar
 #### Relativos a la arquitectura
 * Se ha llevado especial atención en la securización del sistema.
-	Cambio de puerto por defecto de SSH
-	Uso de proxys inversos en nginx con el fin de no abrir puertos innecesarios al exterior.
-	El usuario que maneja las aplicaciónes no tiene posibilidad de login desde fuera.
-	Base de datos Mongo securizada a nivel administración. Además, tiene un usuario específico para manejar la conexión a la base de datos.
-	Despliegue automático de las aplicaciones con pm2.
-	Scripts de shell preparados para un despliegue semi-continuo.
+	* Cambio de puerto por defecto de SSH
+	* Uso de proxys inversos en nginx con el fin de no abrir puertos innecesarios al exterior.
+	* El usuario que maneja las aplicaciónes no tiene posibilidad de login desde fuera.
+	* Base de datos Mongo securizada a nivel administración. Además, tiene un usuario específico para manejar la conexión a la base de datos.
+	* Despliegue automático de las aplicaciones con pm2.
+	* Scripts de shell preparados para un despliegue semi-continuo.
 
 
 #### Relativos a Express y Mongo
