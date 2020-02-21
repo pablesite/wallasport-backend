@@ -25,6 +25,7 @@ Wallasport es una plataforma que permite la compra y venta de productos de segun
 	* Uso de proxys inversos en nginx con el fin de no abrir puertos innecesarios al exterior.
 	* El usuario que maneja las aplicaciónes no tiene posibilidad de login desde fuera.
 	* Base de datos Mongo securizada a nivel administración. Además, tiene un usuario específico para manejar la conexión a la base de datos.
+	* Certificado de seguridad configurado con let's encrypt y certbot.
 	* Despliegue automático de las aplicaciones con pm2.
 	* Scripts de shell preparados para un despliegue semi-continuo.
 
