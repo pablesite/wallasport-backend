@@ -47,9 +47,6 @@ describe('endpoints express', function () {
     done()
   });
 
-  // anuncios post
-  // anuncios put
-  // anuncios delete
   
   it('responds to /apiv1/tags', async (done) => {
 

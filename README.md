@@ -5,6 +5,8 @@ Backend desarrollado en Node con express en el contexto de la práctica final de
 
 Wallasport es una plataforma que permite la compra y venta de productos de segunda mano relacionados con el deporte.
 
+El repositorio con la parte front de Wallasport está en [Repo wsfrontend ](https://gitlab.keepcoding.io/pablesite/wallasport-frontend)
+
 
 **Table de Contenidos**
 
