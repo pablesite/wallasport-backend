@@ -19,7 +19,7 @@ Wallasport es una plataforma que permite la compra y venta de productos de segun
 * Wallasport tiene integrados dos idiomas, inglés y español. Está perfectamente preparada preparada para añadir cuantos idiomas sean necesarios en el futuro.
 
 ### Detalles técnicos a destacar
-#### Relativos a la arquitectura
+#### Relativos a la infraestructura
 * Se ha llevado especial atención en la securización del sistema.
 	* Cambio de puerto por defecto de SSH
 	* Uso de proxys inversos en nginx con el fin de no abrir puertos innecesarios al exterior.
