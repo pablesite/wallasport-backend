@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "amqplib": "^0.5.5",
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "connect-mongo": "^3.1.2",
     "cote": "^0.21.1",
     "dotenv": "^8.2.0",
